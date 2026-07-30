@@ -6,7 +6,7 @@
 
 # The Stage 5 UI (apps/ui) builds in its own stage, so the image carries the
 # /ui assets without a node toolchain on the host (07-ui-design.md §6).
-FROM node:24-alpine AS ui-builder
+FROM node:24-alpine@sha256:a0b9bf06e4e6193cf7a0f58816cc935ff8c2a908f81e6f1a95432d679c54fbfd AS ui-builder
 
 WORKDIR /ui
 
@@ -39,7 +39,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
 # chown at run time.
 RUN mkdir -p /data && chown 65532:65532 /data
 
-FROM gcr.io/distroless/static-debian12:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot@sha256:f5b485ea962d9bd1186b2f6b3a061191539b905b82ec395de78cbfae51f20e35
 
 COPY --from=builder /workspace/profiler-backend /usr/local/bin/profiler-backend
 COPY --from=builder --chown=65532:65532 /data /data
